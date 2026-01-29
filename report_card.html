@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Report Card</title>
+<link rel="stylesheet" href="./css/report_card.css">
+</head>
+
+<body>
+
+<!-- ================= HEADER ================= -->
+<div class="header">
+    <div>
+        <img src="./images/logo.jpeg" class="school-logo">
+    </div>
+
+    <div class="center">
+        <div class="school-name">NORTHEAST ENGLISH PUBLIC SCHOOL</div>
+        <div class="subtext">120E, Bejibari, Laluk, North Lakhimpur, Assam – 784160</div>
+        <div class="subtext bold">Based on CBSE Curriculum</div>
+    </div>
+
+    <div></div>
+</div>
+
+<div class="report-title">
+    REPORT CARD FOR ACADEMIC SESSION : 2026–27
+</div>
+
+<!-- ================= STUDENT INFO ================= -->
+<table class="student-info">
+<tr>
+    <td><b>Name</b></td>
+    <td colspan="3" id="displayName">—</td>
+</tr>
+<tr>
+    <td><b>Class</b></td>
+    <td id="displayClass">—</td>
+    <td><b>Roll No</b></td>
+    <td id="displayRoll">—</td>
+</tr>
+
+</table>
+
+<!-- ================= CONTROLS ================= -->
+<div class="filter-row no-print">
+    <label>Class:</label>
+    <select id="classSelect">
+        <option value="">Select Class</option>
+    </select>
+
+    <label>Student:</label>
+    <select id="studentSelect" disabled>
+        <option value="">Select Student</option>
+    </select>
+
+    <button onclick="printReport()">Print / PDF</button>
+</div>
+
+<!-- ================= MARKS ================= -->
+<table>
+<thead>
+<tr>
+    <th rowspan="3">Subject</th>
+    <th colspan="5">Semester I</th>
+    <th colspan="5">Semester II</th>
+    <th rowspan="3">40%</th>
+    <th rowspan="3">60%</th>
+    <th rowspan="3">Total</th>
+    <th rowspan="3">Grade</th>
+</tr>
+<tr>
+    <th colspan="2">1st Internal</th>
+    <th colspan="2">Mid Term</th>
+    <th rowspan="2">100</th>
+    <th colspan="2">2nd Internal</th>
+    <th colspan="2">Annual Exam</th>
+    <th rowspan="2">100</th>
+</tr>
+<tr>
+    <th>20</th><th>Marks</th>
+    <th>80</th><th>Marks</th>
+    <th>20</th><th>Marks</th>
+    <th>80</th><th>Marks</th>
+</tr>
+</thead>
+
+<tbody id="marks-body"></tbody>
+</table>
+
+<table>
+<tr>
+    <td><b>OVERALL TOTAL</b></td>
+    <td id="overallTotal">—</td>
+    <td><b>PERCENTAGE</b></td>
+    <td id="percentage">—</td>
+</tr>
+</table>
+
+<!-- ================= ATTENDANCE ================= -->
+<h3>Attendance</h3>
+<table>
+<tr><th>Semester</th><th>Working Days</th><th>Present</th></tr>
+<tr>
+    <td>Semester I</td>
+    <td id="attSem1Work">—</td>
+    <td id="attSem1Present">—</td>
+</tr>
+<tr>
+    <td>Semester II</td>
+    <td id="attSem2Work">—</td>
+    <td id="attSem2Present">—</td>
+</tr>
+</table>
+
+<!-- ================= CO-SCHOLASTIC ================= -->
+<h3>Co-Scholastic (A–D)</h3>
+<table class="cs-table">
+<tbody>
+<tr><td>Confidence</td><td id="csConfidence">—</td></tr>
+<tr><td>Uniform</td><td id="csUniform">—</td></tr>
+<tr><td>Discipline</td><td id="csDiscipline">—</td></tr>
+<tr><td>Spoken English</td><td id="csSpoken">—</td></tr>
+<tr><td>Regularity & Punctuality</td><td id="csPunctuality">—</td></tr>
+<tr><td>SUPW</td><td id="csSupw">—</td></tr>
+</tbody>
+</table>
+
+<!-- ================= REMARKS ================= -->
+<p><b>Promoted to Class:</b> __________________________</p> <br>
+<p><b>Class Teacher’s Remarks:</b></p> <br><br
+
+
+<!-- ================= SIGNATURE ================= -->
+<table class="no-border signature">
+<tr>
+    <td class="center">Signature of Class Teacher</td>
+    <td class="center">Signature of Principal</td>
+</tr>
+</table>
+
+<br><br>
+
+<table border="1" cellspacing="0" cellpadding="6">
+    <tr>
+        <th>Marks / Percentage</th>
+        <td>81%–100%</td>
+        <td>71%–80%</td>
+        <td>51%–70%</td>
+        <td>33%–50%</td>
+        <td>Below 33%</td>
+    </tr>
+    <tr>
+        <th>Grade</th>
+        <td>A</td>
+        <td>B</td>
+        <td>C</td>
+        <td>D</td>
+        <td>E</td>
+    </tr>
+    <tr>
+        <th>Remark</th>
+        <td>Excellent</td>
+        <td>Very Good</td>
+        <td>Good</td>
+        <td>Satisfactory</td>
+        <td>Unsatisfactory</td>
+    </tr>
+</table>
+
+<script type="module" src="./js/report_card.js"></script>
+</body>
+</html>

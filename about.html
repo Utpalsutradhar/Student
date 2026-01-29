@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Me</title>
+  <link rel="stylesheet" href="css/style.css">
+  
+</head>
+<body>
+
+  <header class="hero">
+    <div class="slideshow">
+      <img src="images/pic2.jpeg" class="slide active">
+    </div>
+    <h1>Utpal Sutradhar</h1>
+    <p>Postgraduate in Computer Science</p>
+  </header>
+
+  <main class="about-content">
+    <section>
+      <h2>About Me</h2>
+      <p>
+        I am a postgraduate in Computer Science, currently learning
+        web development with a focus on strong fundamentals.
+        This website is part of my hands-on practice and learning journey.
+      </p>
+    </section>
+
+    <section>
+      <h2>Skills</h2>
+      <ul>
+        <li>HTML5 & Semantic Markup</li>
+        <li>CSS3</li>
+        <li>Basic JavaScript</li>
+        <li>Git & GitHub</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2026 Utpal Sutradhar</p>
+  </footer>
+
+<script>
+  let slides = document.querySelectorAll(".slide");
+  let index = 0;
+
+  setInterval(() => {
+    slides[index].classList.remove("active");
+    index = (index + 1) % slides.length;
+    slides[index].classList.add("active");
+  }, 3000);
+</script>
+
+</body>
+</html>

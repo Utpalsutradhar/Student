@@ -1,0 +1,99 @@
+* {
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #f4f6f9;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  text-align: center;
+  color: #666;
+  margin-bottom: 30px;
+}
+
+/* CONTROLS */
+.controls {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.control {
+  flex: 1;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+select {
+  width: 100%;
+  padding: 8px;
+}
+
+/* TABLE */
+.table-wrapper {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+}
+
+th {
+  background: #007bff;
+  color: #fff;
+}
+
+td input {
+  width: 80px;
+  padding: 5px;
+  text-align: center;
+}
+
+/* ACTION */
+.action {
+  margin-top: 20px;
+  text-align: right;
+}
+
+button {
+  padding: 10px 25px;
+  font-size: 15px;
+  background: #28a745;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #1e7e34;
+}
+
+#msg {
+  margin-top: 10px;
+}

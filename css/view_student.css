@@ -1,0 +1,64 @@
+/* Reset & base */
+* {
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #f4f6f9;
+  color: #333;
+}
+
+/* Center content */
+body > h2,
+body > label,
+body > select,
+body > ul {
+  display: block;
+  max-width: 450px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Heading */
+h2 {
+  margin-top: 40px;
+  margin-bottom: 25px;
+  text-align: center;
+  color: #2c3e50;
+}
+
+/* Label */
+label {
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+/* Dropdown */
+select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+/* Student list */
+#studentList {
+  background: #fff;
+  padding: 15px 20px;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  list-style: none;
+}
+
+/* List items */
+#studentList li {
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+#studentList li:last-child {
+  border-bottom: none;
+}

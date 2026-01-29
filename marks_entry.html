@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Marks Entry</title>
+  <link rel="stylesheet" href="css/marks.css">
+</head>
+<body>
+
+<div class="container">
+
+  <h1>Marks Entry Panel</h1>
+  <p class="subtitle">Class-wise & Exam-wise Marks Entry</p>
+
+  <!-- CONTROLS -->
+  <div class="controls">
+
+    <div class="control">
+      <label>Class</label>
+      <select id="classSelect">
+        <option value="">Select Class</option>
+        <option value="class1">Class 1</option>
+        <option value="class2">Class 2</option>
+        <option value="class3">Class 3</option>
+        <option value="class4">Class 4</option>
+        <option value="class5">Class 5</option>
+        <option value="class6">Class 6</option>
+        <option value="class7">Class 7</option>
+        <option value="class8">Class 8</option>
+        <option value="nurseryA">Nursery A </option>
+        <option value="nurseryB">Nursery B </option>
+        <option value="lkgA">LKG A </option>
+        <option value="lkgB">LKG B </option>
+        <option value="ukg">UKG </option>
+      </select>
+    </div>
+
+    <div class="control">
+      <label>Exam</label>
+      <select id="examSelect">
+        <option value="">Select Exam</option>
+        <option value="internal1" data-max="20">1st Internal (20)</option>
+        <option value="midterm" data-max="80">Mid Term (80)</option>
+        <option value="internal2" data-max="20">2nd Internal (20)</option>
+        <option value="final" data-max="80">Final (80)</option>
+      </select>
+    </div>
+
+    <div class="control">
+      <label>Subject</label>
+      <select id="subjectSelect">
+        <option value="">Select Subject</option>
+      </select>
+    </div>
+
+  </div>
+
+  <!-- 🔥 ADD SUBJECT (NEW, REQUIRED) -->
+  <div class="controls">
+    <div class="control">
+      <label>Add New Subject</label>
+      <input
+        type="text"
+        id="newSubjectName"
+        placeholder="e.g. Mathematics"
+      >
+    </div>
+
+    <div class="control">
+      <label>&nbsp;</label>
+      <button id="addSubjectBtn">Add Subject</button>
+    </div>
+  </div>
+
+  <!-- MARKS TABLE -->
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Sl No</th>
+          <th>Student Name</th>
+          <th>Marks</th>
+        </tr>
+      </thead>
+      <tbody id="marksTable">
+        <!-- rows will be generated dynamically -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ACTION -->
+  <div class="action">
+    <button id="saveBtn">Save Marks</button>
+    <p id="msg"></p>
+  </div>
+
+</div>
+
+<!-- 🔥 MARKS ENTRY LOGIC -->
+<script type="module" src="js/student.js"></script>
+
+</body>
+</html>
