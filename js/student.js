@@ -9,7 +9,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 /* =======================
-   DOM ELEMENTS (SAFE)
+   DOM ELEMENTS
 ======================= */
 const classSelect = document.getElementById("classSelect");
 const examSelect = document.getElementById("examSelect");
@@ -27,13 +27,21 @@ const newSubjectNameInput = document.getElementById("newSubjectName");
 let students = [];
 
 /* =======================
-   EVENT LISTENERS (GUARDED)
+   HELPERS
 ======================= */
-if (classSelect) classSelect.addEventListener("change", onClassChange);
-if (examSelect) examSelect.addEventListener("change", tryLoadMarks);
-if (subjectSelect) subjectSelect.addEventListener("change", tryLoadMarks);
-if (saveBtn) saveBtn.addEventListener("click", saveMarks);
-if (addSubjectBtn) addSubjectBtn.addEventListener("click", addSubject);
+function normalizeRoll(roll) {
+  // converts: "s1", "01", "roll_10" → "1", "10"
+  return String(roll).replace(/\D/g, "");
+}
+
+/* =======================
+   EVENT LISTENERS
+======================= */
+classSelect?.addEventListener("change", onClassChange);
+examSelect?.addEventListener("change", tryLoadMarks);
+subjectSelect?.addEventListener("change", tryLoadMarks);
+saveBtn?.addEventListener("click", saveMarks);
+addSubjectBtn?.addEventListener("click", addSubject);
 
 /* =======================
    CLASS CHANGE
@@ -45,7 +53,7 @@ async function onClassChange() {
 
   await loadStudents(cls);
   await loadSubjects(cls);
-  renderTable();
+  renderTable(); // empty marks initially
 }
 
 /* =======================
@@ -53,6 +61,7 @@ async function onClassChange() {
 ======================= */
 async function loadStudents(cls) {
   students = [];
+
   const snap = await get(ref(db, `students/${cls}`));
   if (!snap.exists()) return;
 
@@ -63,7 +72,12 @@ async function loadStudents(cls) {
     });
   });
 
-  students.sort((a, b) => Number(a.roll) - Number(b.roll));
+  // BULLETPROOF NUMERIC SORT
+  students.sort((a, b) => {
+    const ra = parseInt(normalizeRoll(a.roll), 10);
+    const rb = parseInt(normalizeRoll(b.roll), 10);
+    return ra - rb;
+  });
 }
 
 /* =======================
@@ -73,8 +87,9 @@ async function loadSubjects(cls) {
   if (!subjectSelect) return;
 
   subjectSelect.innerHTML = `<option value="">Select Subject</option>`;
+
   const snap = await get(ref(db, `subjects/${cls}`));
-  if (!snap.exists()) see;
+  if (!snap.exists()) return;
 
   snap.forEach(s => {
     const opt = document.createElement("option");
@@ -88,8 +103,6 @@ async function loadSubjects(cls) {
    ADD SUBJECT
 ======================= */
 async function addSubject() {
-  if (!classSelect || !newSubjectNameInput) return;
-
   const cls = classSelect.value;
   const subjectName = newSubjectNameInput.value.trim();
 
@@ -104,29 +117,38 @@ async function addSubject() {
 
   await set(ref(db, path), subjectName);
   newSubjectNameInput.value = "";
-  await loadSubjects(cls);
 
-  if (msg) msg.textContent = `✅ Subject "${subjectName}" added`;
+  await loadSubjects(cls);
+  msg.textContent = `✅ Subject "${subjectName}" added`;
 }
 
 /* =======================
-   RENDER MARKS TABLE
+   RENDER MARK ENTRY TABLE
 ======================= */
 function renderTable(existingMarks = {}) {
   if (!marksTable) return;
   marksTable.innerHTML = "";
 
-  students.forEach((stu, i) => {
+  // Normalize marks keys ONCE
+  const normalizedMarks = {};
+  for (const key in existingMarks) {
+    normalizedMarks[normalizeRoll(key)] = existingMarks[key];
+  }
+
+  students.forEach((stu, index) => {
+    const rollNum = normalizeRoll(stu.roll);
+
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td>${i + 1}</td>
+      <td>${index + 1}</td>
       <td>${stu.name}</td>
       <td>
         <input type="number"
                data-roll="${stu.roll}"
-               value="${existingMarks[stu.roll] ?? ""}">
+               value="${normalizedMarks[rollNum] ?? ""}">
       </td>
     `;
+
     marksTable.appendChild(tr);
   });
 }
@@ -135,8 +157,6 @@ function renderTable(existingMarks = {}) {
    LOAD MARKS
 ======================= */
 async function tryLoadMarks() {
-  if (!classSelect || !examSelect || !subjectSelect) return;
-
   const cls = classSelect.value;
   const exam = examSelect.value;
   const subject = subjectSelect.value;
@@ -144,38 +164,40 @@ async function tryLoadMarks() {
   if (!cls || !exam || !subject || students.length === 0) return;
 
   const snap = await get(ref(db, `marks/${cls}/${exam}/${subject}`));
-  renderTable(snap.exists() ? snap.val() : {});
+  const data = snap.exists() ? snap.val() : {};
+
+  renderTable(data);
 }
 
 /* =======================
    SAVE MARKS
 ======================= */
 async function saveMarks() {
-  if (!classSelect || !examSelect || !subjectSelect || !marksTable) return;
-
   const cls = classSelect.value;
   const exam = examSelect.value;
   const subject = subjectSelect.value;
 
   if (!cls || !exam || !subject) {
-    if (msg) msg.textContent = "❌ Select class, exam, subject";
+    msg.textContent = "❌ Select class, exam, subject";
     return;
   }
 
   const inputs = marksTable.querySelectorAll("input");
   const data = {};
 
-  inputs.forEach(i => {
-    if (i.value !== "") data[i.dataset.roll] = Number(i.value);
+  inputs.forEach(input => {
+    if (input.value !== "") {
+      data[input.dataset.roll] = Number(input.value);
+    }
   });
 
   if (Object.keys(data).length === 0) {
-    if (msg) msg.textContent = "❌ No marks entered";
+    msg.textContent = "❌ No marks entered";
     return;
   }
 
   await set(ref(db, `marks/${cls}/${exam}/${subject}`), data);
-  if (msg) msg.textContent = "✅ Marks saved";
+  msg.textContent = "✅ Marks saved";
 }
 
 /* =======================
@@ -183,8 +205,7 @@ async function saveMarks() {
 ======================= */
 function resetUI() {
   students = [];
-  if (marksTable) marksTable.innerHTML = "";
-  if (subjectSelect)
-    subjectSelect.innerHTML = `<option value="">Select Subject</option>`;
-  if (msg) msg.textContent = "";
+  marksTable.innerHTML = "";
+  subjectSelect.innerHTML = `<option value="">Select Subject</option>`;
+  msg.textContent = "";
 }
