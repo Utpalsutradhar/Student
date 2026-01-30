@@ -11,28 +11,20 @@ import {
 /* =======================
    DOM ELEMENTS
 ======================= */
-const classSelect = document.getElementById("classSelect");
-const examSelect = document.getElementById("examSelect");
+const classSelect   = document.getElementById("classSelect");
+const examSelect    = document.getElementById("examSelect");
 const subjectSelect = document.getElementById("subjectSelect");
-const marksTable = document.getElementById("marksTable");
-const saveBtn = document.getElementById("saveBtn");
-const msg = document.getElementById("msg");
+const marksTable    = document.getElementById("marksTable");
+const saveBtn       = document.getElementById("saveBtn");
+const msg           = document.getElementById("msg");
 
-const addSubjectBtn = document.getElementById("addSubjectBtn");
-const newSubjectNameInput = document.getElementById("newSubjectName");
+const addSubjectBtn        = document.getElementById("addSubjectBtn");
+const newSubjectNameInput  = document.getElementById("newSubjectName");
 
 /* =======================
    STATE
 ======================= */
-let students = [];
-
-/* =======================
-   HELPERS
-======================= */
-function normalizeRoll(roll) {
-  // converts: "s1", "01", "roll_10" → "1", "10"
-  return String(roll).replace(/\D/g, "");
-}
+let students = []; // ORDER DEFINES INDEX (LOCKED)
 
 /* =======================
    EVENT LISTENERS
@@ -53,54 +45,47 @@ async function onClassChange() {
 
   await loadStudents(cls);
   await loadSubjects(cls);
-  renderTable(); // empty marks initially
+  renderTable(); // empty initially
 }
 
 /* =======================
-   LOAD STUDENTS
+   LOAD STUDENTS (INDEX LOCK)
 ======================= */
 async function loadStudents(cls) {
   students = [];
+  marksTable.innerHTML = "";
 
   const snap = await get(ref(db, `students/${cls}`));
   if (!snap.exists()) return;
 
-  snap.forEach(s => {
-    students.push({
-      roll: s.key,
-      name: s.val().name
-    });
-  });
-
-  // BULLETPROOF NUMERIC SORT
-  students.sort((a, b) => {
-    const ra = parseInt(normalizeRoll(a.roll), 10);
-    const rb = parseInt(normalizeRoll(b.roll), 10);
-    return ra - rb;
-  });
+  students = Object.entries(snap.val())
+    .sort((a,b)=>Number(a[1].roll)-Number(b[1].roll))
+    .map(([k,s],i)=>({
+      index: i,      // 🔒 SINGLE SOURCE OF TRUTH
+      roll : s.roll,
+      name : s.name
+    }));
 }
 
 /* =======================
    LOAD SUBJECTS
 ======================= */
 async function loadSubjects(cls) {
-  if (!subjectSelect) return;
-
   subjectSelect.innerHTML = `<option value="">Select Subject</option>`;
 
   const snap = await get(ref(db, `subjects/${cls}`));
   if (!snap.exists()) return;
 
-  snap.forEach(s => {
+  Object.entries(snap.val()).forEach(([k,v])=>{
     const opt = document.createElement("option");
-    opt.value = s.key;
-    opt.textContent = s.val();
+    opt.value = k;       // lowercase key
+    opt.textContent = v; // display name
     subjectSelect.appendChild(opt);
   });
 }
 
 /* =======================
-   ADD SUBJECT
+   ADD SUBJECT (UNCHANGED)
 ======================= */
 async function addSubject() {
   const cls = classSelect.value;
@@ -117,48 +102,39 @@ async function addSubject() {
 
   await set(ref(db, path), subjectName);
   newSubjectNameInput.value = "";
-
   await loadSubjects(cls);
+
   msg.textContent = `✅ Subject "${subjectName}" added`;
 }
 
 /* =======================
-   RENDER MARK ENTRY TABLE
+   RENDER TABLE (INDEX BASED)
 ======================= */
 function renderTable(existingMarks = {}) {
-  if (!marksTable) return;
   marksTable.innerHTML = "";
 
-  // Normalize marks keys ONCE
-  const normalizedMarks = {};
-  for (const key in existingMarks) {
-    normalizedMarks[normalizeRoll(key)] = existingMarks[key];
-  }
-
-  students.forEach((stu, index) => {
-    const rollNum = normalizeRoll(stu.roll);
-
+  students.forEach(stu=>{
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td>${index + 1}</td>
+      <td>${stu.index + 1}</td>
       <td>${stu.name}</td>
       <td>
         <input type="number"
-               data-roll="${stu.roll}"
-               value="${normalizedMarks[rollNum] ?? ""}">
+               min="0"
+               data-index="${stu.index}"
+               value="${existingMarks[stu.index] ?? ""}">
       </td>
     `;
-
     marksTable.appendChild(tr);
   });
 }
 
 /* =======================
-   LOAD MARKS
+   LOAD MARKS (INDEX BASED)
 ======================= */
 async function tryLoadMarks() {
-  const cls = classSelect.value;
-  const exam = examSelect.value;
+  const cls     = classSelect.value;
+  const exam    = examSelect.value;
   const subject = subjectSelect.value;
 
   if (!cls || !exam || !subject || students.length === 0) return;
@@ -170,24 +146,25 @@ async function tryLoadMarks() {
 }
 
 /* =======================
-   SAVE MARKS
+   SAVE MARKS (FINAL FIX)
 ======================= */
 async function saveMarks() {
-  const cls = classSelect.value;
-  const exam = examSelect.value;
+  const cls     = classSelect.value;
+  const exam    = examSelect.value;
   const subject = subjectSelect.value;
 
   if (!cls || !exam || !subject) {
-    msg.textContent = "❌ Select class, exam, subject";
+    msg.textContent = "❌ Select class, exam and subject";
     return;
   }
 
   const inputs = marksTable.querySelectorAll("input");
   const data = {};
 
-  inputs.forEach(input => {
-    if (input.value !== "") {
-      data[input.dataset.roll] = Number(input.value);
+  inputs.forEach(inp=>{
+    const idx = inp.dataset.index;
+    if (inp.value !== "") {
+      data[idx] = Number(inp.value); // 🔒 INDEX BASED
     }
   });
 
@@ -197,7 +174,7 @@ async function saveMarks() {
   }
 
   await set(ref(db, `marks/${cls}/${exam}/${subject}`), data);
-  msg.textContent = "✅ Marks saved";
+  msg.textContent = "✅ Marks saved successfully";
 }
 
 /* =======================
