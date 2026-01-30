@@ -30,8 +30,8 @@ function formatSubjectName(key) {
     computerscience: "COMPUTER SCIENCE",
     socialstudies: "SOCIAL STUDIES",
     evs: "EVS",
-    math: "MATHEMATICS",
-    maths: "MATHEMATICS"
+    englishliterature: "ENGLISH LITERATURE",
+    englishgrammar: "ENGLISH GRAMMAR"
   };
   return map[key] || key.toUpperCase();
 }
