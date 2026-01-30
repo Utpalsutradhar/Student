@@ -1,96 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <title>Academic Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <link rel="stylesheet" href="css/style.css">
-  <meta charset="UTF-8">
-  <title>Semantic Practice</title>
 </head>
 <body>
 
-  <header>
-    <h1>My First Semantic Page</h1>
+  <!-- ================= HEADER ================= -->
+  <header class="site-header">
+    <div class="header-content">
+      <h1>Academic Dashboard</h1>
+      <p class="tagline">Manage exams, reports & activities</p>
+    </div>
+
+    <nav class="main-nav">
+      <a href="addmission.html">Add Student</a>
+      <a href="about.html">About</a>
+      <a href="marks_entry.html">Marks Entry</a>
+      <a href="report_card.html">Report Card</a>
+      <a href="co_scolastic.html">Co-Scholastic</a>
+    </nav>
   </header>
 
-  <nav>
-    <a href="addmission.html">Addmission</a>
-    <a href="about.html">About</a>
-    <a href="marks_entry.html">Exam</a>
-    <a href="report_card.html">Report Card</a>
-    <a href="co_scolastic.html">Co-Scholastic</a>
+  <!-- ================= MAIN ================= -->
+  <main class="main-content">
 
+    <!-- ===== DASHBOARD SECTION ===== -->
+    <section class="dashboard">
+      <header class="section-header">
+        <h2>Academic Panel</h2>
+        <p>Select an action to continue</p>
+      </header>
 
-  </nav>
+      <div class="card-grid">
 
-<main>
+        <a href="marks_entry.html" class="card">
+          <span class="card-icon">➕</span>
+          <h3>Upload Marks</h3>
+          <p>Enter and update exam scores</p>
+        </a>
 
-  <section>
-    <h2>About Me</h2>
-    <p>I am learning web development step by step using proper HTML structure.</p>
+        <a href="report_card.html" class="card">
+          <span class="card-icon">📋</span>
+          <h3>View Report Cards</h3>
+          <p>Class-wise academic report card</p>
+        </a>
 
-    <h3>Skills I Am Learning</h3>
-    <ul>
-      <li>HTML semantics</li>
-      <li>CSS layout</li>
-      <li>JavaScript basics</li>
-    </ul>
-  </section>
+        <a href="co_scolastic.html" class="card">
+          <span class="card-icon">📚</span>
+          <h3>Co-Scholastic</h3>
+          <p>Upload co-scholastic grades</p>
+        </a>
 
-  <article>
-    <figure>
-  <img 
-    src="images/krishna.jpeg" 
-    alt="A image of radha krishna for HTML practice"
-    width="300"
-    height="200">
-  <figcaption>Sample image for learning HTML media</figcaption>
-</figure>
-    <h2>Learning Process</h2>
-    <p>Learning HTML correctly makes CSS and JavaScript easier later.</p>
+      </div>
+    </section>
 
-    <h3>Steps I Follow</h3>
-    <ol>
-      <li>Understand structure</li>
-      <li>Write clean HTML</li>
-      <li>Add styling later</li>
-    </ol>
+    <!-- ===== LEARNING ARTICLE ===== -->
+    <article class="content-article">
 
-    <p>
-      Read more at
-      <a href="https://developer.mozilla.org/" target="_blank">
-        MDN Web Docs
-      </a>
-    </p>
+      <figure class="article-media">
+        <img
+          src="images/krishna.jpeg"
+          alt="Radha Krishna image used for HTML media practice"
+          width="400"
+          height="250">
+        <figcaption>Sample image for HTML media learning</figcaption>
+      </figure>
 
-    <section>
-  <h2>Contact Form</h2>
+      <header>
+        <h2>Learning the Right Way</h2>
+      </header>
 
-  <form autocomplete="off">
-    <fieldset>
-      <legend>Your Details</legend>
+      <p>
+        Learning HTML properly builds a strong foundation for CSS and JavaScript.
+        Clean structure today saves pain tomorrow.
+      </p>
 
-      <label for="username">Name:</label><br>
-      <input id="username" type="text" name="username"><br><br>
+      <h3>My Learning Steps</h3>
+      <ol>
+        <li>Understand semantic structure</li>
+        <li>Write readable, clean HTML</li>
+        <li>Layer CSS and JavaScript later</li>
+      </ol>
 
-      <label for="email">Email:</label><br>
-      <input id="email" type="email" name="email"><br><br>
+      <p>
+        Recommended resource:
+        <a href="https://developer.mozilla.org/" target="_blank" rel="noopener">
+          MDN Web Docs
+        </a>
+      </p>
 
-      <label for="message">Message:</label><br>
-      <textarea id="message" name="message" rows="4" cols="30"></textarea><br><br>
+    </article>
 
-      <input type="submit" value="Send">
-    </fieldset>
-  </form>
-</section>
+  </main>
 
-  </article>
-
-</main>
-
-
-  <footer>
-    <p>© 2026 My Website</p>
+  <!-- ================= FOOTER ================= -->
+  <footer class="site-footer">
+    <p>© 2026 My Website. All rights reserved.</p>
   </footer>
+
   <script type="module" src="js/student.js"></script>
 </body>
 </html>
