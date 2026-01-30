@@ -155,27 +155,44 @@ async function saveMarks() {
 
   if (!cls || !exam || !subject) {
     msg.textContent = "❌ Select class, exam and subject";
+    msg.style.color = "red";
     return;
   }
 
   const inputs = marksTable.querySelectorAll("input");
   const data = {};
 
-  inputs.forEach(inp=>{
+  inputs.forEach(inp => {
     const idx = inp.dataset.index;
     if (inp.value !== "") {
-      data[idx] = Number(inp.value); // 🔒 INDEX BASED
+      data[idx] = Number(inp.value); // index-based, good 👍
     }
   });
 
   if (Object.keys(data).length === 0) {
     msg.textContent = "❌ No marks entered";
+    msg.style.color = "red";
     return;
   }
 
-  await set(ref(db, `marks/${cls}/${exam}/${subject}`), data);
-  msg.textContent = "✅ Marks saved successfully";
+  try {
+    await set(ref(db, `marks/${cls}/${exam}/${subject}`), data);
+
+    // ✅ SUCCESS FEEDBACK
+    
+    msg.style.color = "green";
+    alert("✅ Marks saved successfully!");
+
+  } catch (error) {
+    console.error(error);
+
+    // ❌ FAILURE FEEDBACK
+    msg.textContent = "❌ Failed to save marks";
+    msg.style.color = "red";
+    alert("❌ Error saving marks. Check internet or Firebase rules.");
+  }
 }
+
 
 /* =======================
    RESET UI

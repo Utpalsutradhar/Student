@@ -120,19 +120,28 @@ async function loadReport(cls,index){
 
     total += g; count++;
 
+
+    
+    
     tbody.insertAdjacentHTML("beforeend",`
       <tr>
         <td>${formatSubjectName(sk)}</td>
-        <td>20</td><td>${pad2(i1)}</td>
-        <td>80</td><td>${pad2(mt)}</td>
+
+        <!-- Semester I -->
+        <td>${pad2(i1)}</td>
+        <td>${pad2(mt)}</td>
         <td>${pad2(s1)}</td>
-        <td>20</td><td>${pad2(i2)}</td>
-        <td>80</td><td>${pad2(fe)}</td>
+
+    <!-- Semester II -->
+        <td>${pad2(i2)}</td>
+        <td>${pad2(fe)}</td>
         <td>${pad2(s2)}</td>
+
+    <!-- Final calculation -->
         <td>${pad2(w40)}</td>
         <td>${pad2(w60)}</td>
         <td>${pad2(g)}</td>
-        <td>${grade(g)}</td>
+        <td>${grade(g)}</td>    
       </tr>
     `);
   });
