@@ -26,12 +26,18 @@ function formatSubjectName(key) {
   const map = {
     gk: "GK",
     assamese: "ASSAMESE",
-    english: "ENGLISH",
+    assameseoral: "ASSAMESE ORAL",
     computerscience: "COMPUTER SCIENCE",
     socialstudies: "SOCIAL STUDIES",
-    evs: "EVS",
+    assamesedictation: "ASSAMESE DICTATION",
     englishliterature: "ENGLISH LITERATURE",
-    englishgrammar: "ENGLISH GRAMMAR"
+    englishgrammar: "ENGLISH GRAMMAR",
+    englishdictation: "ENGLISH DICTATION",
+    englishoral: "ENGLISH ORAL",
+    hindidictation: "HINDI DICTATION",
+    hindioral: "HINDI ORAL",
+    evsoral: "EVS ORAL"
+
   };
   return map[key] || key.toUpperCase();
 }
