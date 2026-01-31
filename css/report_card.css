@@ -1,4 +1,6 @@
-/* ================= RESET ================= */
+/* =========================================================
+   RESET & BASE
+========================================================= */
 * {
   box-sizing: border-box;
 }
@@ -7,11 +9,13 @@ body {
   margin: 0;
   background: #ccc;
   font-family: "Times New Roman", serif;
-  font-size: 12px;
+  font-size: 11px;
   line-height: 1.2;
 }
 
-/* ================= A4 PAGE ================= */
+/* =========================================================
+   A4 PAGE
+========================================================= */
 .a4-page {
   width: 210mm;
   min-height: 297mm;
@@ -20,144 +24,163 @@ body {
   background: #fff;
 }
 
-/* ================= HEADER ================= */
+/* =========================================================
+   HEADER (LOGOS + SCHOOL NAME)
+========================================================= */
 .header {
   display: grid;
-  grid-template-columns: 70px 1fr 70px;
+  grid-template-columns: 80px 1fr 80px;
   align-items: center;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
+}
+
+.school-logo {
+  width: 65px;
+}
+
+.header {
+  display: grid;
+  grid-template-columns: 80px 1fr 80px;
+  align-items: center;
 }
 
 .school-logo {
   width: 90px;
 }
 
-.center {
+.left-logo {
+  justify-self: start;
+}
+
+.right-logo {
+  justify-self: end;
+}
+
+
+.header .center {
   text-align: center;
 }
 
 .school-name {
-  font-size: 24px;
+  font-size: 30px;
   font-weight: bold;
-  padding: 3px 0;
+  letter-spacing: 1px;
 }
 
 .subtext {
-  font-size: 14px;
+  font-size: 12px;
+  font-weight: bold;
 }
-
-
 
 .report-title {
-  text-align: center;
-  font-size: 16px;
+  font-size: 11.5px;
   font-weight: bold;
-  margin: 4px 0;
+  margin-top: 2px;
+  text-align: center;
 }
 
-/* ================= CONTROLS (SCREEN ONLY) ================= */
-.filter-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 6px 0;
-}
-
-.filter-row label {
-  font-size: 11px;
-}
-
-.filter-row select,
-.filter-row button {
-  font-size: 11px;
-  padding: 2px 4px;
-}
-
-/* ================= TABLES ================= */
+/* =========================================================
+   GLOBAL TABLE STYLES
+========================================================= */
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 th,
 td {
   border: 1px solid #000;
+  padding: 4px 6px;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 11px;
+}
+
+/* =========================================================
+   STUDENT INFO TABLE (NAME / ROLL / CLASS)
+========================================================= */
+.student-info {
+  table-layout: fixed;
+}
+
+.student-info td {
+  font-size: 12px;          /* IMPORTANT */
+  font-weight: bold;
+  text-align: left;
+}
+
+.student-info tr:nth-child(2) td:nth-child(2),
+.student-info tr:nth-child(2) td:nth-child(4) {
+  text-align: center;
+}
+
+/* =========================================================
+   MARKS TABLE (COMPACT & NEAT)
+========================================================= */
+.marks-table thead th {
+  font-size: 11px;
   padding: 3px;
+}
+
+#marks-body td {
+  font-size: 11px;
+  padding: 3px;
+  line-height: 1.1;
+}
+
+/* =========================================================
+   SUMMARY / PERCENTAGE
+========================================================= */
+.summary-table td {
+  font-weight: bold;
+  font-size: 11.5px;
+}
+
+/* =========================================================
+   SECTION HEADINGS
+========================================================= */
+h3 {
+  font-size: 11.5px;
+  margin: 6px 0 3px;
+}
+
+/* =========================================================
+   CO-SCHOLASTIC TABLE
+========================================================= */
+.cs-table td {
+  font-size: 11px;
+  padding: 5px;
+}
+
+.cs-table td:first-child {
+  text-align: left;
+}
+
+/* =========================================================
+   GRADE LEGEND (CLEAN & ALIGNED)
+========================================================= */
+.grade-legend td,
+.grade-legend th {
+  font-size: 11px;
+  padding: 4px;
+  line-height: 1.1;
   text-align: center;
   vertical-align: middle;
 }
 
-/* ================= STUDENT INFO ================= */
-.student-info td {
-  text-align: left;
-}
-/* ================= STUDENT INFO – ROW 2 ONLY ================= */
-.student-info tr:nth-child(2) td:nth-child(2),
-.student-info tr:nth-child(2) td:nth-child(4) {
-  text-align: center;
-  font-weight: bold;
-}
-
-/* ================= MARKS TABLE (COMPRESSED) ================= */
-.marks-table thead th {
-  font-size: 10px;
-  padding: 2px;
-  line-height: 1.1;
-}
-
-#marks-body td {
-  font-size: 10.5px;
-  padding: 2px;
-  line-height: 1.1;
-}
-/* ================= percentage table ================= */
-/* ================= SUMMARY TABLE – VALUE EMPHASIS ================= */
-.summary-table td {
-  font-weight: bold;
-  text-align: center;
-}
-
-
-
-
-/* ================= SECTION HEADINGS ================= */
-h3 {
-  margin: 4px 0 2px;
-  font-size: 11.5px;
-}
-
-/* ================= CO-SCHOLASTIC ================= */
-.cs-table td:first-child {
-  text-align: left;
-}
-/* ================= CO-SCHOLASTIC (SPACING FIX) ================= */
-.cs-table td {
-  padding: 5px 5px;      /* was 3px */
-  font-size: 11px;
-  line-height: 1.25;
-}
-
-
-/* ================= SIGNATURE ================= */
-/* ================= SIGNATURE (SPACING FIX) ================= */
+/* =========================================================
+   SIGNATURE
+========================================================= */
 .signature td {
   border: none;
-  padding-top: 40px;     /* was 16px */
-  font-weight: bold;
+  padding-top: 40px;
   font-size: 11.5px;
-}
-
-
-/* ================= GRADE LEGEND ================= */
-.grade-legend {
-  font-size: 10.5px;
-  margin-top: 4px;
-  page-break-inside: avoid;
+  font-weight: bold;
 }
 
 /* =========================================================
-   PRINT RULES (THIS IS WHERE RESTRICTIONS APPLY)
+   PRINT RULES
 ========================================================= */
 @media print {
 
@@ -171,22 +194,14 @@ h3 {
   }
 
   .a4-page {
-    width: auto;
-    min-height: auto;
     margin: 0;
     padding: 0;
-  }
-
-  /* 🔴 HIDE CONTROLS ONLY DURING PRINT */
-  .no-print,
-  .filter-row {
-    display: none !important;
   }
 
   table,
   tr,
   td,
   th {
-    page-break-inside: avoid !important;
+    page-break-inside: avoid;
   }
 }
