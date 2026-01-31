@@ -66,6 +66,10 @@ function formatClassName(key) {
               .toUpperCase();
   }
 
+  if (/^playgroup$/i.test(key)) {
+    return "PLAY GROUP";
+  }
+  
   return key.toUpperCase();
 }
 
