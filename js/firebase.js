@@ -1,3 +1,4 @@
+/*
 // firebase.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getDatabase } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
@@ -20,3 +21,24 @@ const db = getDatabase(app);
 
 // EXPORT db (THIS IS CRITICAL)
 export { db };
+*/
+
+// js/firebase.js
+import { initializeApp } from
+"https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+
+import { getDatabase } from
+"https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+export const firebaseConfig = {
+  apiKey: "AIzaSyA-CwOWgmeKTpQWqbnt9yzUrSmZs6naxdE",
+  authDomain: "school-web-app-23fae.firebaseapp.com",
+  databaseURL: "https://school-web-app-23fae-default-rtdb.firebaseio.com",
+  projectId: "school-web-app-23fae",
+  storageBucket: "school-web-app-23fae.firebasestorage.app",
+  messagingSenderId: "720669262440",
+  appId: "1:720669262440:web:9e921ec7f8fdc75bb031dd"
+};
+
+export const app = initializeApp(firebaseConfig);
+export const db  = getDatabase(app);
