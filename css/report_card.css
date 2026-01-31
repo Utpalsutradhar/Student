@@ -202,6 +202,12 @@ h3 {
   tr,
   td,
   th {
-    page-break-inside: avoid;
+    page-break-inside: avoid !important;
+  }
+
+  /* 🔥 HIDE ALL CONTROLS */
+  .no-print,
+  .filter-row {
+    display: none !important;
   }
 }
