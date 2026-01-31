@@ -14,12 +14,60 @@ const displayName   = document.getElementById("displayName");
 const overallTotalEl = document.getElementById("overallTotal");
 const percentageEl   = document.getElementById("percentage");
 
+const attSem1Percent = document.getElementById("attSem1Percent");
+const attSem2Percent = document.getElementById("attSem2Percent");
+
 /* ================= CACHE ================= */
 let orderedStudents = [];
 
 /* ================= HELPERS ================= */
-const pad2 = v => (v === "" || v == null) ? "" : String(v).padStart(2,"0");
-const grade = t => t>=90?"A":t>=75?"B":t>=60?"C":t>=45?"D":"E";
+const pad2 = v => (v === "" || v == null) ? "" : String(v).padStart(2, "0");
+
+/* ===== FINAL GRADE LOGIC (PERCENTAGE BASED) ===== */
+function getGradeFromPercentage(p) {
+  p = Number(p);
+  if (isNaN(p)) return "—";
+
+  return p >= 90 ? "A+" :
+         p >= 80 ? "A"  :
+         p >= 60 ? "B"  :
+         p >= 45 ? "C"  :
+         p >= 33 ? "D"  : "E";
+}
+
+/* ===== CLASS NAME FORMATTER ===== */
+function formatClassName(key) {
+  const roman = {
+    1: "I", 2: "II", 3: "III", 4: "IV", 5: "V",
+    6: "VI", 7: "VII", 8: "VIII", 9: "IX",
+    10: "X", 11: "XI", 12: "XII"
+  };
+
+  if (/^class\d+$/i.test(key)) {
+    const num = key.match(/\d+/)[0];
+    return roman[num] || num;
+  }
+
+  if (/^nursery/i.test(key)) {
+    return key.replace(/^nursery/i, "NURSERY ")
+              .replace(/([A-Z])$/, " $1")
+              .toUpperCase();
+  }
+
+  if (/^lkg/i.test(key)) {
+    return key.replace(/^lkg/i, "LKG ")
+              .replace(/([A-Z])$/, " $1")
+              .toUpperCase();
+  }
+
+  if (/^ukg/i.test(key)) {
+    return key.replace(/^ukg/i, "UKG ")
+              .replace(/([A-Z])$/, " $1")
+              .toUpperCase();
+  }
+
+  return key.toUpperCase();
+}
 
 /* ===== SUBJECT NAME FORMATTER ===== */
 function formatSubjectName(key) {
@@ -27,8 +75,6 @@ function formatSubjectName(key) {
     gk: "GK",
     assamese: "ASSAMESE",
     assameseoral: "ASSAMESE ORAL",
-    computerscience: "COMPUTER SCIENCE",
-    socialstudies: "SOCIAL STUDIES",
     assamesedictation: "ASSAMESE DICTATION",
     englishliterature: "ENGLISH LITERATURE",
     englishgrammar: "ENGLISH GRAMMAR",
@@ -36,53 +82,54 @@ function formatSubjectName(key) {
     englishoral: "ENGLISH ORAL",
     hindidictation: "HINDI DICTATION",
     hindioral: "HINDI ORAL",
+    socialstudies: "SOCIAL STUDIES",
+    computerscience: "COMPUTER SCIENCE",
     evsoral: "EVS ORAL"
-
   };
   return map[key] || key.toUpperCase();
 }
 
 /* ================= RESET EXTRAS ================= */
-function resetExtras(){
+function resetExtras() {
   [
-    "attSem1Work","attSem1Present",
-    "attSem2Work","attSem2Present",
+    "attSem1Work","attSem1Present","attSem1Percent",
+    "attSem2Work","attSem2Present","attSem2Percent",
     "csConfidence","csUniform","csDiscipline",
     "csSpoken","csPunctuality","csSupw"
-  ].forEach(id=>{
+  ].forEach(id => {
     const el = document.getElementById(id);
-    if(el) el.textContent = "—";
+    if (el) el.textContent = "—";
   });
 }
 
 /* ================= LOAD CLASSES ================= */
-async function loadClasses(){
-  const snap = await get(ref(db,"students"));
-  if(!snap.exists()) return;
+async function loadClasses() {
+  const snap = await get(ref(db, "students"));
+  if (!snap.exists()) return;
 
-  Object.keys(snap.val()).forEach(cls=>{
+  Object.keys(snap.val()).forEach(cls => {
     const opt = document.createElement("option");
     opt.value = cls;
-    opt.textContent = cls.replace("class","Class ");
+    opt.textContent = formatClassName(cls);
     classSelect.appendChild(opt);
   });
 }
 
 /* ================= LOAD STUDENTS ================= */
-async function loadStudents(cls){
+async function loadStudents(cls) {
   studentSelect.innerHTML = `<option value="">Select Student</option>`;
   resetExtras();
   tbody.innerHTML = "";
 
-  const snap = await get(ref(db,`students/${cls}`));
-  if(!snap.exists()) return;
+  const snap = await get(ref(db, `students/${cls}`));
+  if (!snap.exists()) return;
 
   orderedStudents = Object.entries(snap.val())
-    .sort((a,b)=>Number(a[1].roll)-Number(b[1].roll));
+    .sort((a, b) => Number(a[1].roll) - Number(b[1].roll));
 
-  orderedStudents.forEach(([k,s],i)=>{
+  orderedStudents.forEach(([_, s], i) => {
     const opt = document.createElement("option");
-    opt.value = i; // 🔒 INDEX IS TRUTH
+    opt.value = i;
     opt.textContent = `Roll ${pad2(s.roll)} - ${s.name}`;
     studentSelect.appendChild(opt);
   });
@@ -91,73 +138,77 @@ async function loadStudents(cls){
 }
 
 /* ================= LOAD REPORT ================= */
-async function loadReport(cls,index){
+async function loadReport(cls, index) {
   index = Number(index);
   resetExtras();
   tbody.innerHTML = "";
 
-  const [rk,stu] = orderedStudents[index];
+  const [, stu] = orderedStudents[index];
 
-  displayClass.textContent = cls.replace("class","Class ");
+  displayClass.textContent = formatClassName(cls);
   displayRoll.textContent  = pad2(stu.roll);
   displayName.textContent  = stu.name.toUpperCase();
 
-  const [subSnap,markSnap] = await Promise.all([
-    get(ref(db,`subjects/${cls}`)),
-    get(ref(db,`marks/${cls}`))
+  const [subSnap, markSnap] = await Promise.all([
+    get(ref(db, `subjects/${cls}`)),
+    get(ref(db, `marks/${cls}`))
   ]);
 
-  if(!subSnap.exists()) return;
+  if (!subSnap.exists()) return;
 
   const marks = markSnap.exists() ? markSnap.val() : {};
-  let total = 0, count = 0;
+  let grandTotal = 0;
+  let subjectCount = 0;
 
-  Object.keys(subSnap.val()).forEach(sk=>{
-    const i1 = marks.internal1?.[sk]?.[index] ?? "";
-    const mt = marks.midterm?.[sk]?.[index] ?? "";
-    const i2 = marks.internal2?.[sk]?.[index] ?? "";
-    const fe = marks.final?.[sk]?.[index] ?? "";
+  Object.keys(subSnap.val()).forEach(sk => {
+    const i1 = Number(marks.internal1?.[sk]?.[index] ?? 0);
+    const mt = Number(marks.midterm?.[sk]?.[index] ?? 0);
+    const i2 = Number(marks.internal2?.[sk]?.[index] ?? 0);
+    const fe = Number(marks.final?.[sk]?.[index] ?? 0);
 
-    const s1 = +i1 + +mt;
-    const s2 = +i2 + +fe;
-    const w40 = Math.round(s1 * 0.4);
-    const w60 = Math.round(s2 * 0.6);
-    const g   = w40 + w60;
+    const sem1Total = i1 + mt;
+    const sem2Total = i2 + fe;
 
-    total += g; count++;
+    const weighted40 = Math.round(sem1Total * 0.4);
+    const weighted60 = Math.round(sem2Total * 0.6);
+    const subjectTotal = weighted40 + weighted60;
 
+    grandTotal += subjectTotal;
+    subjectCount++;
 
-    
-    
-    tbody.insertAdjacentHTML("beforeend",`
+    const subjectGrade = getGradeFromPercentage(subjectTotal);
+
+    tbody.insertAdjacentHTML("beforeend", `
       <tr>
         <td>${formatSubjectName(sk)}</td>
-
-        <!-- Semester I -->
         <td>${pad2(i1)}</td>
         <td>${pad2(mt)}</td>
-        <td>${pad2(s1)}</td>
-
-    <!-- Semester II -->
+        <td>${pad2(sem1Total)}</td>
         <td>${pad2(i2)}</td>
         <td>${pad2(fe)}</td>
-        <td>${pad2(s2)}</td>
-
-    <!-- Final calculation -->
-        <td>${pad2(w40)}</td>
-        <td>${pad2(w60)}</td>
-        <td>${pad2(g)}</td>
-        <td>${grade(g)}</td>    
+        <td>${pad2(sem2Total)}</td>
+        <td>${pad2(weighted40)}</td>
+        <td>${pad2(weighted60)}</td>
+        <td>${pad2(subjectTotal)}</td>
+        <td>${subjectGrade}</td>
       </tr>
     `);
   });
 
-  overallTotalEl.textContent = total;
-  percentageEl.textContent   = count ? (total/count).toFixed(2) : "0.00";
+  /* ===== OVERALL TOTAL & PERCENTAGE ===== */
+  overallTotalEl.textContent = grandTotal;
+
+  const overallPercentage = subjectCount
+    ? (grandTotal / subjectCount)
+    : 0;
+
+  percentageEl.textContent = subjectCount
+    ? overallPercentage.toFixed(2) + "%"
+    : "—";
 
   /* ===== CO-SCHOLASTIC ===== */
-  const cs = await get(ref(db,`co_scholastic/${cls}/${index}`));
-  if(cs.exists()){
+  const cs = await get(ref(db, `co_scholastic/${cls}/${index}`));
+  if (cs.exists()) {
     const c = cs.val();
     csConfidence.textContent  = c.confidence || "—";
     csUniform.textContent     = c.uniform || "—";
@@ -168,13 +219,24 @@ async function loadReport(cls,index){
   }
 
   /* ===== ATTENDANCE ===== */
-  const at = await get(ref(db,`attendance/${cls}/${index}`));
-  if(at.exists()){
+  const at = await get(ref(db, `attendance/${cls}/${index}`));
+  if (at.exists()) {
     const a = at.val();
+
     attSem1Work.textContent    = a.sem1_working || "—";
     attSem1Present.textContent = a.sem1_present || "—";
     attSem2Work.textContent    = a.sem2_working || "—";
     attSem2Present.textContent = a.sem2_present || "—";
+
+    attSem1Percent.textContent =
+      a.sem1_working
+        ? ((a.sem1_present / a.sem1_working) * 100).toFixed(2) + "%"
+        : "—";
+
+    attSem2Percent.textContent =
+      a.sem2_working
+        ? ((a.sem2_present / a.sem2_working) * 100).toFixed(2) + "%"
+        : "—";
   }
 }
 

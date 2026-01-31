@@ -37,17 +37,16 @@ body {
 }
 
 .school-name {
-  font-size: 20px;
+  font-size: 24px;
   font-weight: bold;
+  padding: 3px 0;
 }
 
 .subtext {
   font-size: 14px;
 }
 
-.bold {
-  font-weight: bold;
-}
+
 
 .report-title {
   text-align: center;
@@ -93,6 +92,12 @@ td {
 .student-info td {
   text-align: left;
 }
+/* ================= STUDENT INFO – ROW 2 ONLY ================= */
+.student-info tr:nth-child(2) td:nth-child(2),
+.student-info tr:nth-child(2) td:nth-child(4) {
+  text-align: center;
+  font-weight: bold;
+}
 
 /* ================= MARKS TABLE (COMPRESSED) ================= */
 .marks-table thead th {
@@ -106,6 +111,15 @@ td {
   padding: 2px;
   line-height: 1.1;
 }
+/* ================= percentage table ================= */
+/* ================= SUMMARY TABLE – VALUE EMPHASIS ================= */
+.summary-table td {
+  font-weight: bold;
+  text-align: center;
+}
+
+
+
 
 /* ================= SECTION HEADINGS ================= */
 h3 {
