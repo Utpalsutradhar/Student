@@ -9,7 +9,7 @@ body {
   margin: 0;
   background: #ccc;
   font-family: "Times New Roman", serif;
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.2;
 }
 
@@ -34,9 +34,6 @@ body {
   margin-bottom: 6px;
 }
 
-.school-logo {
-  width: 65px;
-}
 
 .header {
   display: grid;
@@ -45,7 +42,7 @@ body {
 }
 
 .school-logo {
-  width: 90px;
+  width: 100px;
 }
 
 .left-logo {
@@ -62,20 +59,21 @@ body {
 }
 
 .school-name {
-  font-size: 30px;
+  font-size: 40px;
   font-weight: bold;
   letter-spacing: 1px;
 }
 
 .subtext {
-  font-size: 12px;
+  font-size: 18px;
   font-weight: bold;
 }
 
 .report-title {
-  font-size: 11.5px;
+  font-size: 13px;
   font-weight: bold;
   margin-top: 2px;
+  margin-bottom: 4px;
   text-align: center;
 }
 
@@ -110,10 +108,6 @@ td {
   text-align: left;
 }
 
-.student-info tr:nth-child(2) td:nth-child(2),
-.student-info tr:nth-child(2) td:nth-child(4) {
-  text-align: center;
-}
 
 /* =========================================================
    MARKS TABLE (COMPACT & NEAT)
@@ -134,15 +128,15 @@ td {
 ========================================================= */
 .summary-table td {
   font-weight: bold;
-  font-size: 11.5px;
+  font-size: 12px;
 }
 
 /* =========================================================
    SECTION HEADINGS
 ========================================================= */
 h3 {
-  font-size: 11.5px;
-  margin: 6px 0 3px;
+  font-size: 14px;
+  margin: 14px 0 3px;
 }
 
 /* =========================================================
@@ -175,6 +169,7 @@ h3 {
 .signature td {
   border: none;
   padding-top: 40px;
+  padding-bottom: 20px;
   font-size: 11.5px;
   font-weight: bold;
 }
